@@ -23,7 +23,9 @@ exports.getIndexItemInfo = function(apiKey, urls, callback) {
 
   request(reqURL, function(err, response, body) {
     if (err) return callback(err);
-    return callback(null, JSON.parse(body));
+    var parsedBody = JSON.parse(body);
+    if (parsedBody.ErrorMessage) return callback(new Error(parsedBody.ErrorMessage));
+    return callback(null, parsedBody);
   });
 };
 
