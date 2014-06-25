@@ -4,7 +4,7 @@
   "description": "A node module for accessing the majesticseo API.",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha tests"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,8 @@
   "homepage": "https://github.com/noblesamurai/node-majesticseo",
   "dependencies": {
     "request": "^2.36.0"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1"
   }
 }
