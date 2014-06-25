@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/noblesamurai/node-majesticseo/issues"
   },
-  "homepage": "https://github.com/noblesamurai/node-majesticseo"
+  "homepage": "https://github.com/noblesamurai/node-majesticseo",
+  "dependencies": {
+    "request": "^2.36.0"
+  }
 }
