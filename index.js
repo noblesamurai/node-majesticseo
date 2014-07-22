@@ -1,11 +1,11 @@
 var request = require('request'),
     url = require('url');
 
-exports.getIndexItemInfo = function(apiKey, urls, callback) {
+exports.getIndexItemInfo = function(apiKey, urls, options, callback) {
   var query = {
       app_api_key: apiKey,
       cmd: 'GetIndexItemInfo',
-      datasource: 'fresh'
+      datasource: options.backlinkSource
   };
 
   urls.forEach(function(value, index) {
@@ -25,10 +25,7 @@ exports.getIndexItemInfo = function(apiKey, urls, callback) {
     reqURL.host = 'developer.majesticseo.com';
   }
 
-  reqURLString = url.format(reqURL);
-  console.log(reqURLString);
-
-  request(reqURLString, function(err, response, body) {
+  request(url.format(reqURL), function(err, response, body) {
     if (err) return callback(err);
     var parsedBody = JSON.parse(body);
     if (parsedBody.ErrorMessage) return callback(new Error(parsedBody.ErrorMessage));
