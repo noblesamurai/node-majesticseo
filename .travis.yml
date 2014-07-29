@@ -1,0 +1,6 @@
+language: node_js
+node_js:
+  - 0.10
+env:
+  matrix:
+    secure: QnthPGGHFUSf5pG/BcSKLNTRGtNsnqG5P+G9ju1X7kqbVUP+Zi+mo+ongOH40/SHj/3H9ztMn7hIHqxJdMCWjcJREPFrE+/BtG6T/eb5H/gIOiOMh9bYkDrFRRewjDAqsxUniC6CZJgPuIkFiVqGgrppsZ5xUnSkwSWdbha+JiA=

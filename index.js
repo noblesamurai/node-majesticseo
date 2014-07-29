@@ -9,7 +9,7 @@ exports.getIndexItemInfo = function(apiKey, urls, options, callback) {
   };
 
   urls.forEach(function(value, index) {
-    query['item' + index] = value;
+    query['item' + index] = encodeURIComponent(value);
   });
 
   query.items = urls.length;
@@ -17,15 +17,14 @@ exports.getIndexItemInfo = function(apiKey, urls, options, callback) {
   var reqURL = {
     protocol: 'http',
     host: 'enterprise.majesticseo.com',
-    pathname: '/api/json',
-    query: query
+    pathname: '/api/json'
   };
 
   if (process.env.NODE_ENV === 'test') {
     reqURL.host = 'developer.majesticseo.com';
   }
 
-  request(url.format(reqURL), function(err, response, body) {
+  request.post(url.format(reqURL), {form: query}, function(err, response, body) {
     if (err) return callback(err);
     try {
       var parsedBody = JSON.parse(body);
