@@ -31,8 +31,13 @@ describe('Majestic', function() {
 
     it('has well formed request to majestic', function(done) {
       var majesticNock = nock('http://developer.majesticseo.com').
-        get('/api/json?app_api_key=' + process.env.MAJESTIC_API_KEY +
-            '&cmd=GetIndexItemInfo&datasource=historic&item0=http%3A%2F%2Fgoogle.com&item1=http%3A%2F%2Fwikipedia.com&items=2').
+        post('/api/json', {
+          app_api_key: process.env.MAJESTIC_API_KEY,
+          cmd: 'GetIndexItemInfo',
+          datasource: 'historic',
+          item0: 'http%3A%2F%2Fgoogle.com',
+          item1: 'http%3A%2F%2Fwikipedia.com',
+          items: 2}).
         reply(200, '{}');
       majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
         ['http://google.com', 'http://wikipedia.com'],
