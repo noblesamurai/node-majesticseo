@@ -27,9 +27,13 @@ exports.getIndexItemInfo = function(apiKey, urls, options, callback) {
 
   request(url.format(reqURL), function(err, response, body) {
     if (err) return callback(err);
-    var parsedBody = JSON.parse(body);
-    if (parsedBody.ErrorMessage) return callback(new Error(parsedBody.ErrorMessage));
-    return callback(null, parsedBody);
+    try {
+      var parsedBody = JSON.parse(body);
+      if (parsedBody.ErrorMessage) return callback(new Error(parsedBody.ErrorMessage));
+      return callback(null, parsedBody);
+    } catch(err) {
+      return callback(new Error('Failed to parse: ' + body + '\n' + err.message));
+    }
   });
 };
 
