@@ -33,7 +33,7 @@ describe('Majestic', function() {
       var majesticNock = nock('http://developer.majesticseo.com').
         get('/api/json?app_api_key=' + process.env.MAJESTIC_API_KEY +
             '&cmd=GetIndexItemInfo&datasource=historic&item0=http%3A%2F%2Fgoogle.com&item1=http%3A%2F%2Fwikipedia.com&items=2').
-        reply(200, {});
+        reply(200, '{}');
       majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
         ['http://google.com', 'http://wikipedia.com'],
         {backlinkSource: 'historic'},
@@ -43,6 +43,21 @@ describe('Majestic', function() {
         if (err) return done(err);
 
         majesticNock.done();
+        done();
+      }
+    });
+
+    it('calls the error callback on bad json response', function(done) {
+      var majesticNock = nock('http://developer.majesticseo.com').
+        get('/api/json?app_api_key=' + process.env.MAJESTIC_API_KEY +
+            '&cmd=GetIndexItemInfo&datasource=historic&item0=http%3A%2F%2Fgoogle.com&item1=http%3A%2F%2Fwikipedia.com&items=2').
+        reply(200, "{nup thats not right}");
+      majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
+        ['http://google.com', 'http://wikipedia.com'],
+        {backlinkSource: 'historic'},
+        expectations);
+      function expectations(err) {
+        expect(err).to.be.ok();
         done();
       }
     });
