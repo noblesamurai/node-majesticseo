@@ -35,8 +35,8 @@ describe('Majestic', function() {
           app_api_key: process.env.MAJESTIC_API_KEY,
           cmd: 'GetIndexItemInfo',
           datasource: 'historic',
-          item0: 'http%3A%2F%2Fgoogle.com',
-          item1: 'http%3A%2F%2Fwikipedia.com',
+          item0: 'http://google.com',
+          item1: 'http://wikipedia.com',
           items: 2}).
         reply(200, '{}');
       majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
