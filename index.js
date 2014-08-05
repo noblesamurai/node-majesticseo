@@ -9,7 +9,7 @@ exports.getIndexItemInfo = function(apiKey, urls, options, callback) {
   };
 
   urls.forEach(function(value, index) {
-    query['item' + index] = encodeURIComponent(value);
+    query['item' + index] = encodeURI(value);
   });
 
   query.items = urls.length;
