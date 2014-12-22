@@ -18,8 +18,9 @@ describe('Majestic', function() {
     });
 
     it('should return results', function(done){
+      this.timeout=10000;
       majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
-        ['http://google.com', 'http://wikipedia.com'],
+        ['http://google.com', 'http://wikipedia.com', 'kleinanzeigen.ebay.de', 'yoyo.com'],
         {backlinkSource: 'fresh'},
         callback);
       function callback(err, result) {
@@ -54,14 +55,71 @@ describe('Majestic', function() {
 
     it('calls the error callback on bad json response', function(done) {
       var majesticNock = nock('http://developer.majesticseo.com').
-        get('/api/json?app_api_key=' + process.env.MAJESTIC_API_KEY +
-            '&cmd=GetIndexItemInfo&datasource=historic&item0=http%3A%2F%2Fgoogle.com&item1=http%3A%2F%2Fwikipedia.com&items=2').
+        post('/api/json', {
+          app_api_key: process.env.MAJESTIC_API_KEY,
+          cmd: 'GetIndexItemInfo',
+          datasource: 'historic',
+          item0: 'http://google.com',
+          item1: 'http://wikipedia.com',
+          items: 2}).
         reply(200, '{nup thats not right}');
       majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
         ['http://google.com', 'http://wikipedia.com'],
         {backlinkSource: 'historic'},
         expectations);
       function expectations(err) {
+        majesticNock.done();
+        expect(err).to.be.ok();
+        done();
+      }
+    });
+  });
+  describe('#getSubscriptionInfo()', function(){
+    it('should error on failure', function(done){
+      majestic.getSubscriptionInfo('wrongkey', callback);
+      function callback(err) {
+        expect(err).to.be.an(Error);
+        done();
+      }
+    });
+
+    it('should return results', function(done){
+      this.timeout=10000;
+      majestic.getSubscriptionInfo(process.env.MAJESTIC_API_KEY, callback);
+      function callback(err, result) {
+        expect(err).to.be(null);
+        expect(result).to.be.ok();
+        done();
+      }
+    });
+
+    it('has well formed request to majestic', function(done) {
+      var majesticNock = nock('http://developer.majesticseo.com').
+        post('/api/json', {
+          app_api_key: process.env.MAJESTIC_API_KEY,
+          cmd: 'GetSubscriptionInfo'}).
+        reply(200, '{}');
+
+      majestic.getSubscriptionInfo(process.env.MAJESTIC_API_KEY, expectations);
+
+      function expectations(err) {
+        if (err) return done(err);
+        majesticNock.done();
+        done();
+      }
+    });
+
+    it('gives error on bad json response', function(done) {
+      var majesticNock = nock('http://developer.majesticseo.com').
+        post('/api/json', {
+          app_api_key: process.env.MAJESTIC_API_KEY,
+          cmd: 'GetSubscriptionInfo'}).
+        reply(200, '{nup thats not right}');
+
+      majestic.getSubscriptionInfo(process.env.MAJESTIC_API_KEY, expectations);
+
+      function expectations(err) {
+        majesticNock.done();
         expect(err).to.be.ok();
         done();
       }

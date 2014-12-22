@@ -7,7 +7,8 @@ Node module for access to the majesticseo API.
 ```javascript
 var majestic = require('majesticseo');
 
-majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY, ['http://google.com', 'http://wikipedia.com'], {dataSource: 'fresh'}, callback);
+majestic.getIndexItemInfo(apiKey, ['http://google.com', 'http://wikipedia.com'], {dataSource: 'fresh'}, callback);
+majestic.getSubscriptionInfo(apiKey, callback);
 ```
 
 # Tests
