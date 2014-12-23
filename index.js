@@ -23,6 +23,7 @@ exports.getIndexItemInfo = function(apiKey, urls, options, callback) {
     query['item' + index] = encodeURI(value);
   });
   query.items = urls.length;
+  query.EnableResourceUnitFailover = 1;
 
   request.post(url.format(majesticURL), {form: query}, makeResponseHandler(callback));
 };

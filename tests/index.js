@@ -38,7 +38,8 @@ describe('Majestic', function() {
           datasource: 'historic',
           item0: 'http://google.com',
           item1: 'http://wikipedia.com',
-          items: 2}).
+          items: 2,
+          EnableResourceUnitFailover: 1}).
         reply(200, '{}');
       majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
         ['http://google.com', 'http://wikipedia.com'],
@@ -61,7 +62,8 @@ describe('Majestic', function() {
           datasource: 'historic',
           item0: 'http://google.com',
           item1: 'http://wikipedia.com',
-          items: 2}).
+          items: 2,
+          EnableResourceUnitFailover: 1}).
         reply(200, '{nup thats not right}');
       majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
         ['http://google.com', 'http://wikipedia.com'],
