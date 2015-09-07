@@ -1,13 +1,13 @@
-var majestic = require('../index'),
-    expect = require('expect.js'),
+    var expect = require('expect.js'),
     nock = require('nock');
 
 describe('Majestic', function() {
   describe('#getIndexItemInfo()', function(){
 
     it('should error on failure', function(done){
-      majestic.getIndexItemInfo('wrongkey',
-        ['http://google.com', 'http://wikipedia.com'],
+      this.timeout(4000);
+      var majestic = require('../index')('wrongkey');
+      majestic.getIndexItemInfo(['http://google.com', 'http://wikipedia.com'],
         {backlinkSource: 'fresh'},
         callback);
       function callback(err) {
@@ -18,8 +18,9 @@ describe('Majestic', function() {
     });
 
     it('should return results', function(done){
-      this.timeout=10000;
-      majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
+      this.timeout(10000);
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
+      majestic.getIndexItemInfo(
         ['http://google.com', 'http://wikipedia.com', 'kleinanzeigen.ebay.de', 'yoyo.com'],
         {backlinkSource: 'fresh'},
         callback);
@@ -31,6 +32,7 @@ describe('Majestic', function() {
     });
 
     it('has well formed request to majestic', function(done) {
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
       var majesticNock = nock('http://developer.majesticseo.com').
         post('/api/json', {
           app_api_key: process.env.MAJESTIC_API_KEY,
@@ -41,7 +43,7 @@ describe('Majestic', function() {
           items: 2,
           EnableResourceUnitFailover: 1}).
         reply(200, '{}');
-      majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
+      majestic.getIndexItemInfo(
         ['http://google.com', 'http://wikipedia.com'],
         {backlinkSource: 'historic'},
         expectations);
@@ -55,6 +57,7 @@ describe('Majestic', function() {
     });
 
     it('calls the error callback on bad json response', function(done) {
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
       var majesticNock = nock('http://developer.majesticseo.com').
         post('/api/json', {
           app_api_key: process.env.MAJESTIC_API_KEY,
@@ -65,8 +68,7 @@ describe('Majestic', function() {
           items: 2,
           EnableResourceUnitFailover: 1}).
         reply(200, '{nup thats not right}');
-      majestic.getIndexItemInfo(process.env.MAJESTIC_API_KEY,
-        ['http://google.com', 'http://wikipedia.com'],
+      majestic.getIndexItemInfo(['http://google.com', 'http://wikipedia.com'],
         {backlinkSource: 'historic'},
         expectations);
       function expectations(err) {
@@ -78,7 +80,9 @@ describe('Majestic', function() {
   });
   describe('#getSubscriptionInfo()', function(){
     it('should error on failure', function(done){
-      majestic.getSubscriptionInfo('wrongkey', callback);
+      this.timeout(4000);
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
+      majestic.getSubscriptionInfo(callback);
       function callback(err) {
         expect(err).to.be.an(Error);
         done();
@@ -86,8 +90,9 @@ describe('Majestic', function() {
     });
 
     it('should return results', function(done){
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
       this.timeout=10000;
-      majestic.getSubscriptionInfo(process.env.MAJESTIC_API_KEY, callback);
+      majestic.getSubscriptionInfo(callback);
       function callback(err, result) {
         expect(err).to.be(null);
         expect(result).to.be.ok();
@@ -96,13 +101,14 @@ describe('Majestic', function() {
     });
 
     it('has well formed request to majestic', function(done) {
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
       var majesticNock = nock('http://developer.majesticseo.com').
         post('/api/json', {
           app_api_key: process.env.MAJESTIC_API_KEY,
           cmd: 'GetSubscriptionInfo'}).
         reply(200, '{}');
 
-      majestic.getSubscriptionInfo(process.env.MAJESTIC_API_KEY, expectations);
+      majestic.getSubscriptionInfo(expectations);
 
       function expectations(err) {
         if (err) return done(err);
@@ -112,17 +118,32 @@ describe('Majestic', function() {
     });
 
     it('gives error on bad json response', function(done) {
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
       var majesticNock = nock('http://developer.majesticseo.com').
         post('/api/json', {
           app_api_key: process.env.MAJESTIC_API_KEY,
           cmd: 'GetSubscriptionInfo'}).
         reply(200, '{nup thats not right}');
 
-      majestic.getSubscriptionInfo(process.env.MAJESTIC_API_KEY, expectations);
+      majestic.getSubscriptionInfo(expectations);
 
       function expectations(err) {
         majesticNock.done();
         expect(err).to.be.ok();
+        done();
+      }
+    });
+  });
+  describe('#getKeywordInfo()', function() {
+    it('should return results', function(done){
+      this.timeout(10000);
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
+      majestic.getKeywordInfo(['http://google.com', 'http://wikipedia.com', 'kleinanzeigen.ebay.de', 'yoyo.com'],
+        {},
+        callback);
+      function callback(err, result) {
+        expect(err).to.be(null);
+        expect(result).to.be.ok();
         done();
       }
     });
