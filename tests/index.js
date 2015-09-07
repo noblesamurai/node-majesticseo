@@ -138,12 +138,13 @@ describe('Majestic', function() {
     it('should return results', function(done){
       this.timeout(10000);
       var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
-      majestic.getKeywordInfo(['http://google.com', 'http://wikipedia.com', 'kleinanzeigen.ebay.de', 'yoyo.com'],
+      majestic.getKeywordInfo(['my thing', 'another keyword', 'flowers', 'yoyo'],
         {},
         callback);
       function callback(err, result) {
         expect(err).to.be(null);
         expect(result).to.be.ok();
+        expect(result.DataTables.Keywords.Data.length).to.be.ok();
         done();
       }
     });
