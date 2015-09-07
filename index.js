@@ -27,7 +27,9 @@ module.exports = function(apiKey) {
       items.forEach(function(value, index) {
         query['item' + index] = (command === 'GetIndexItemInfo') ? encodeURI(value) : value;
       });
-      query.items = items.length;
+      if (command === 'GetIndexItemInfo') {
+        query.items = items.length;
+      }
       query.EnableResourceUnitFailover = 1;
     }
 
