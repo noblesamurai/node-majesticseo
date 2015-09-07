@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'test') {
 
 module.exports = function(apiKey) {
 
-  function doRequest(command, urls, options, callback) {
+  function doRequest(command, items, options, callback) {
     var query = {
         app_api_key: apiKey,
         cmd: command
@@ -23,11 +23,11 @@ module.exports = function(apiKey) {
       query.datasource = options.backlinkSource;
     }
 
-    if (urls) {
-      urls.forEach(function(value, index) {
-        query['item' + index] = encodeURI(value);
+    if (items) {
+      items.forEach(function(value, index) {
+        query['item' + index] = (command === 'GetIndexItemInfo') ? encodeURI(value) : value;
       });
-      query.items = urls.length;
+      query.items = items.length;
       query.EnableResourceUnitFailover = 1;
     }
 
