@@ -81,7 +81,7 @@ describe('Majestic', function() {
   describe('#getSubscriptionInfo()', function(){
     it('should error on failure', function(done){
       this.timeout(4000);
-      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
+      var majestic = require('../index')('wrongkey');
       majestic.getSubscriptionInfo(callback);
       function callback(err) {
         expect(err).to.be.an(Error);
@@ -135,7 +135,7 @@ describe('Majestic', function() {
     });
   });
   describe('#getKeywordInfo()', function() {
-    it('should return results', function(done){
+    it('should return results', function(done) {
       this.timeout(10000);
       var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
       majestic.getKeywordInfo(['my thing', 'another keyword', 'flowers', 'yoyo'],
@@ -145,6 +145,21 @@ describe('Majestic', function() {
         expect(err).to.be(null);
         expect(result).to.be.ok();
         expect(result.DataTables.Keywords.Data.length).to.be.ok();
+        done();
+      }
+    });
+  });
+  describe('#getBackLinkData()', function() {
+    it('should return results', function(done) {
+      this.timeout(10000);
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
+      majestic.getBackLinkData('http://www.majestic12.co.uk/',
+        {},
+        callback);
+      function callback(err, result) {
+        expect(err).to.be(null);
+        expect(result).to.be.ok();
+        expect(result.DataTables.BackLinks.Data.length).to.be.ok();
         done();
       }
     });

@@ -23,7 +23,9 @@ module.exports = function(apiKey) {
       query.datasource = options.backlinkSource;
     }
 
-    if (items) {
+    if (command === 'GetBackLinkData') {
+      query.item = items;
+    } else if (items) {
       items.forEach(function(value, index) {
         query['item' + index] = (command === 'GetIndexItemInfo') ? encodeURI(value) : value;
       });
@@ -39,20 +41,24 @@ module.exports = function(apiKey) {
   return {
     getSubscriptionInfo: doRequest.bind(null, 'GetSubscriptionInfo', null, {}),
     getIndexItemInfo: doRequest.bind(null, 'GetIndexItemInfo'),
-    getKeywordInfo: doRequest.bind(null, 'GetKeywordInfo')
+    getKeywordInfo: doRequest.bind(null, 'GetKeywordInfo'),
+    getBackLinkData: function(item, options, callback) {
+      return doRequest('GetBackLinkData', item, options, callback);
+    }
   };
 };
 
 function makeResponseHandler(callback) {
   return function handleResponse(err, response, body) {
     if (err) return callback(err);
+    var parsedBody;
     try {
-      var parsedBody = JSON.parse(body);
+       parsedBody = JSON.parse(body);
       if (parsedBody.ErrorMessage) return callback(new Error(parsedBody.ErrorMessage));
-      return callback(null, parsedBody);
     } catch(err) {
       return callback(new Error('Failed to parse: ' + body + '\n' + err.message));
     }
+    return callback(null, parsedBody);
   };
 }
 
