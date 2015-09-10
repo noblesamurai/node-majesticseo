@@ -25,6 +25,7 @@ module.exports = function(apiKey) {
 
     if (command === 'GetBackLinkData') {
       query.item = items;
+      if (options.backlinkCount) query.Count = options.backlinkCount;
     } else if (items) {
       items.forEach(function(value, index) {
         query['item' + index] = (command === 'GetIndexItemInfo') ? encodeURI(value) : value;
