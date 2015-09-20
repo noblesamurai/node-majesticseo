@@ -1,6 +1,6 @@
 {
   "name": "majesticseo",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A node module for accessing the majesticseo API.",
   "main": "index.js",
   "scripts": {
