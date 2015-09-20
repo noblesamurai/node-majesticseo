@@ -148,6 +148,30 @@ describe('Majestic', function() {
         done();
       }
     });
+    it.only('should request majestic fresh data', function(done) {
+      var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
+      var majesticNock = nock('http://developer.majesticseo.com').
+        post('/api/json', {
+          app_api_key: process.env.MAJESTIC_API_KEY,
+          cmd: 'GetKeywordInfo',
+          DataSource: 'fresh',
+          item0: 'my thing',
+          item1: 'another keyword',
+          item2: 'flowers',
+          item3: 'yoyo',
+          EnableResourceUnitFailover: 1}).
+        reply(200, '{}');
+      majestic.getKeywordInfo(['my thing', 'another keyword', 'flowers', 'yoyo'],
+        {},
+        expectations);
+
+      function expectations(err) {
+        if (err) return done(err);
+
+        majesticNock.done();
+        done();
+      }
+    });
   });
   describe('#getBackLinkData()', function() {
     it('should return results', function(done) {
