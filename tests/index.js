@@ -148,7 +148,7 @@ describe('Majestic', function() {
         done();
       }
     });
-    it.only('should request majestic fresh data', function(done) {
+    it('should respect backlinkSource data', function(done) {
       var majestic = require('../index')(process.env.MAJESTIC_API_KEY);
       var majesticNock = nock('http://developer.majesticseo.com').
         post('/api/json', {
@@ -162,7 +162,7 @@ describe('Majestic', function() {
           EnableResourceUnitFailover: 1}).
         reply(200, '{}');
       majestic.getKeywordInfo(['my thing', 'another keyword', 'flowers', 'yoyo'],
-        {},
+        {backlinkSource: 'fresh'},
         expectations);
 
       function expectations(err) {

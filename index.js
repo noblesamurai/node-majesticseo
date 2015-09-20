@@ -20,7 +20,8 @@ module.exports = function(apiKey) {
     };
 
     if (options.backlinkSource) {
-      query.datasource = options.backlinkSource;
+      if (command === 'GetKeywordInfo') query.DataSource = options.backlinkSource;
+      else query.datasource = options.backlinkSource;
     }
 
     if (command === 'GetBackLinkData') {
